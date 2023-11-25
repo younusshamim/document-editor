@@ -24,7 +24,8 @@ const Upload = ({onDrop, uploading, progress}) => {
                 {...getRootProps()}
             >
                 <img className='w-20' src={pdfIcon} alt="PDF Icon"/>
-                {uploading ? <p>Uploading... {progress}%</p> : <h2 className='text-3xl font-bold'>Drag & drop PDF files here, or click to select files</h2>}
+                {uploading ? <progress className="progress progress-info w-56" value={progress} max="100"></progress> 
+                : <h2 className='text-3xl font-bold'>Drag & drop PDF files here, or click to select files</h2>}
 
                 <PrimaryButton className="px-10">
                     <div><LuUpload /></div>

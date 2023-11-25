@@ -2,8 +2,7 @@ import { useLayoutEffect, useState } from "react";
 import toast from "react-hot-toast";
 import {
   getLocalStorageItems,
-  removeLocalStorageItem,
-  setOnLocalStorage,
+  saveToLocalStorage,
 } from "../utils/localStorage";
 import { v4 as uuidv4 } from "uuid";
 
@@ -13,32 +12,20 @@ const useFileUpload = () => {
   const [progress, setProgress] = useState(0);
 
   const handleRemoveItem = (item) => {
-    removeLocalStorageItem("pdfFiles", item);
-    const filterd = pdfList.filter((pdf) => pdf.id !== item.id);
-    setPdfList(filterd);
+    const storedItems = getLocalStorageItems("pdfFiles");
+    const filtered = storedItems.filter((pdf) => pdf.id !== item.id);
+    saveToLocalStorage("pdfFiles", filtered);
+    setPdfList(filtered);
   };
 
-  const saveLocalStorage = (item) => {
-    const items = getLocalStorageItems("pdfFiles");
-    items.push(item);
-    setOnLocalStorage("pdfFiles", items);
+  const saveToLocalStorageAndUpdateState = (item) => {
+    const storedItems = getLocalStorageItems("pdfFiles");
+    saveToLocalStorage("pdfFiles", [...storedItems, item]);
+    setPdfList((prevFiles) => [...prevFiles, item]);
   };
 
-  const onDrop = async (acceptedFiles) => {
-    setUploading(true);
-
-    acceptedFiles.forEach(async (file, index) => {
-      const uniqueId = uuidv4();
-
-      if (!file.type.startsWith("application/pdf")) {
-        toast.error(`Please select only PDF files: ${file.name}`);
-        return;
-      }
-      if (file.size > 1024 * 1024) {
-        toast.error(`File size exceeds 1 MB limit: ${file.name}`);
-        return;
-      }
-
+  const readFileContent = (file) => {
+    return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onprogress = (event) => {
         if (event.lengthComputable) {
@@ -49,16 +36,44 @@ const useFileUpload = () => {
         }
       };
       reader.onload = (event) => {
-        const fileContent = event.target.result;
-        const item = { id: uniqueId, name: file.name, content: fileContent };
-        setPdfList((prevFiles) => [...prevFiles, item]);
-        saveLocalStorage(item);
+        resolve(event.target.result);
+      };
+      reader.onerror = (error) => {
+        reject(error);
       };
       reader.readAsDataURL(file);
     });
+  };
 
-    setUploading(false);
-    setProgress(0);
+  const onDrop = async (acceptedFiles) => {
+    setUploading(true);
+
+    for (const file of acceptedFiles) {
+      const uniqueId = uuidv4();
+
+      try {
+        if (!file.type.startsWith("application/pdf")) {
+          toast.error(`Please select only PDF files: ${file.name}`);
+          continue;
+        }
+        if (file.size > 1024 * 1024) {
+          toast.error(`File size exceeds 1 MB limit: ${file.name}`);
+          continue;
+        }
+
+        const fileContent = await readFileContent(file);
+        const item = { id: uniqueId, name: file.name, content: fileContent };
+        saveToLocalStorageAndUpdateState(item);
+      } catch (error) {
+        toast.error(
+          "Error processing file: " +
+            (error?.message || "An unexpected error occurred.")
+        );
+      } finally {
+        setProgress(0);
+        setUploading(false);
+      }
+    }
   };
 
   useLayoutEffect(() => {
