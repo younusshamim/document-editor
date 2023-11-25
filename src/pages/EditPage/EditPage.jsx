@@ -2,7 +2,7 @@ import React from 'react';
 
 const EditPage = () => {
     return (
-        <div>
+        <div className='flex flex-col items-center min-h-screen bg-orange-50'>
             Edit Page
         </div>
     );
