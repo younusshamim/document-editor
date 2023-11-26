@@ -1,8 +1,11 @@
 import React from "react";
 
-const PrimaryButton = ({children, className, ...rest}) => {
+const PrimaryButton = ({ children, className, ...rest }) => {
   return (
-    <button className={`${className} btn bg-blue-950 hover:bg-blue-950 text-white h-12 text-lg px-6`} {...rest}>
+    <button
+      className={`${className} btn btn-sm bg-blue-950 hover:bg-blue-950 text-white`}
+      {...rest}
+    >
       {children}
     </button>
   );
