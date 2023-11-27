@@ -1,5 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import {
+  getLocalStorageItems,
+  saveToLocalStorage,
+} from "../utils/localStorage";
 
 const useElementsAdd = () => {
   const [actionType, setActionType] = useState("");
@@ -26,6 +30,8 @@ const useElementsAdd = () => {
 
   const handleAddElement = (newElement) => {
     setElements((prevElements) => [...prevElements, newElement]);
+    const storedItems = getLocalStorageItems("elements");
+    saveToLocalStorage("elements", [...storedItems, newElement]);
   };
 
   const changeCoordinates = (id, clientX, clientY, delta) => {
@@ -46,10 +52,9 @@ const useElementsAdd = () => {
     }
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e, pageNum) => {
     const uniqueId = uuidv4();
-    const file = e.target.files[0];
-    const img = URL.createObjectURL(file);
+    const img = URL?.createObjectURL(e.target.files[0]);
 
     if (img) {
       handleAddElement({
@@ -57,11 +62,17 @@ const useElementsAdd = () => {
         type: actionType,
         content: img,
         position: { ...coordinates },
+        pageNum,
       });
     }
 
     clearStates();
   };
+
+  useEffect(() => {
+    const items = getLocalStorageItems("elements");
+    setElements(items);
+  }, []);
 
   return {
     actionType,

@@ -15,6 +15,7 @@ const ActionButtons = ({
   handleActionClick,
   actionType,
   handleImageChange,
+  currPage,
 }) => {
   const addImageRef = useRef();
 
@@ -40,7 +41,7 @@ const ActionButtons = ({
         display="none"
         type="file"
         className="hidden"
-        onChange={handleImageChange}
+        onChange={(e) => handleImageChange(e, currPage)}
         ref={addImageRef}
         accept="image/*"
       />

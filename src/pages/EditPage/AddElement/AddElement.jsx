@@ -6,6 +6,7 @@ const AddElement = ({
   clearStates,
   handleAddElement,
   actionType,
+  currPage,
 }) => {
   const uniqueId = uuidv4();
 
@@ -19,6 +20,7 @@ const AddElement = ({
       type: actionType,
       content: e.target.value,
       position: { ...coordinates },
+      pageNum: currPage,
     });
     clearStates();
   };

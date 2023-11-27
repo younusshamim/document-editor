@@ -5,7 +5,6 @@ const SingleElement = ({ el }) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: el.id,
   });
-
   const dndKitStyle = transform
     ? {
         transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,

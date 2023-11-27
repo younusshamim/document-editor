@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Document } from "react-pdf";
+import { Document, Page } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import convertToUint8Array from "../../utils/convertToUint8Array";
 import ActionButtons from "./ActionButtons/ActionButtons";
-import SinglePage from "./SinglePage/SinglePage";
+import Pagination from "./Pagination/Pagination";
 import useElementsAdd from "../../hooks/useElementsAdd";
 import AddElement from "./AddElement/AddElement";
 import ShowElements from "./ShowElements/ShowElements";
@@ -16,6 +16,7 @@ const EditPage = () => {
     state: { file },
   } = useLocation();
   const [numPages, setNumPages] = useState(null);
+  const [currPage, setCurrPage] = useState(1);
   const {
     actionType,
     coordinates,
@@ -42,12 +43,13 @@ const EditPage = () => {
         handleActionClick={handleActionClick}
         actionType={actionType}
         handleImageChange={handleImageChange}
+        currPage={currPage}
       />
 
       <Document
         file={pdfDataUrl}
         onLoadSuccess={onDocumentLoadSuccess}
-        className={`max-w-[100%] overflow-auto bg-gray-200 p-2 relative ${
+        className={`max-w-[100%] overflow-auto  relative ${
           actionType === "text" ? "cursor-text" : "cursor-default"
         }`}
         onClick={handleDocumentBodyClick}
@@ -58,23 +60,27 @@ const EditPage = () => {
             clearStates={clearStates}
             handleAddElement={handleAddElement}
             actionType={actionType}
+            currPage={currPage}
           />
         )}
 
         {elements.length > 0 && (
           <DndContext onDragEnd={handleDragEnd}>
-            <ShowElements elements={elements} />
+            <ShowElements elements={elements} pageNum={currPage} />
           </DndContext>
         )}
 
-        {[...Array(numPages).keys()].map((_, i) => (
-          <SinglePage
-            key={i}
+        <div className="bg-gray-200 p-2">
+          <Page pageNumber={currPage} size />
+        </div>
+
+        {numPages > 1 && (
+          <Pagination
             numPages={numPages}
-            index={i}
-            coordinates={coordinates}
+            currPage={currPage}
+            setCurrPage={setCurrPage}
           />
-        ))}
+        )}
       </Document>
     </div>
   );
