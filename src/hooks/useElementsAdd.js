@@ -34,22 +34,25 @@ const useElementsAdd = () => {
     saveToLocalStorage("elements", [...storedItems, newElement]);
   };
 
-  const changeCoordinates = (id, clientX, clientY, delta) => {
-    if (id && clientX !== undefined && clientY !== undefined) {
-      const updatedElements = elements.map((item) => {
-        if (item.id === id) {
-          return {
-            ...item,
-            position: {
-              x: clientX - delta.x,
-              y: clientY - delta.y,
-            },
-          };
-        }
-        return item;
-      });
-      setElements(updatedElements);
-    }
+  const changeCoordinates = (event) => {
+    const { id } = event.active;
+    const { x, y } = event.delta;
+
+    const updatedElements = elements.map((item) => {
+      if (item.id === id) {
+        return {
+          ...item,
+          position: {
+            x: item.position.x + x,
+            y: item.position.y + y,
+          },
+        };
+      }
+      return item;
+    });
+
+    setElements(updatedElements);
+    saveToLocalStorage("elements", updatedElements);
   };
 
   const handleImageChange = async (e, pageNum) => {

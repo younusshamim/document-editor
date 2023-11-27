@@ -68,7 +68,7 @@ const EditPage = () => {
         )}
 
         {elements.length > 0 && (
-          <DndContext onDragEnd={handleDragEnd}>
+          <DndContext onDragEnd={changeCoordinates}>
             <ShowElements elements={elements} pageNum={currPage} />
           </DndContext>
         )}
@@ -87,13 +87,6 @@ const EditPage = () => {
       </Document>
     </div>
   );
-
-  function handleDragEnd(event) {
-    const { id } = event.active;
-    const { delta } = event;
-    const { clientX, clientY } = event.activatorEvent;
-    changeCoordinates(id, clientX, clientY, delta);
-  }
 };
 
 export default EditPage;
