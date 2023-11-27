@@ -15,18 +15,14 @@ const Pagination = ({ numPages, currPage, setCurrPage }) => {
   };
 
   return (
-    <div className="flex justify-between items-center mt-2 ">
-      <p className="text-right mb-1 mr-1">
+    <div className="flex justify-between items-center mt-3 ">
+      <p className="text-right mb-1 mr-1 text-white">
         Page {currPage} of {numPages}
       </p>
 
-      <div className="border border-gray-300 flex gap-1">
-        <PrimaryButton onClick={goToPreviousPage} disabled={currPage === 1}>
-          Previous
-        </PrimaryButton>
-        <PrimaryButton onClick={goToNextPage} disabled={currPage === numPages}>
-          Next
-        </PrimaryButton>
+      <div className="flex gap-2">
+        <PrimaryButton onClick={goToPreviousPage}>Previous</PrimaryButton>
+        <PrimaryButton onClick={goToNextPage}>Next</PrimaryButton>
       </div>
     </div>
   );

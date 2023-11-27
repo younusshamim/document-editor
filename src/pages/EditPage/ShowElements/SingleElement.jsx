@@ -1,24 +1,29 @@
 import { useDraggable } from "@dnd-kit/core";
 import React from "react";
 
-const SingleElement = ({ el }) => {
+const SingleElement = ({ el, zoom = 1 }) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: el.id,
   });
   const dndKitStyle = transform
     ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+        transform: `translate3d(${transform.x * zoom}px, ${
+          transform.y * zoom
+        }px, 0)`,
       }
     : undefined;
 
   switch (el.type) {
     case "text":
+      const elFontSize = `${14 * zoom}px`;
+
       return (
         <pre
           className="absolute z-10 cursor-move"
           style={{
-            top: `${el.position.y}px`,
-            left: `${el.position.x}px`,
+            fontSize: elFontSize,
+            top: `${el.position.y * zoom}px`,
+            left: `${el.position.x * zoom}px`,
             ...dndKitStyle,
           }}
           ref={setNodeRef}
@@ -30,19 +35,20 @@ const SingleElement = ({ el }) => {
       );
 
     case "image":
+      const imgWidth = `${192 * zoom}px`;
+
       return (
         <img
           src={el.content}
           alt=""
-          className="absolute z-10 cursor-move w-48"
+          className="absolute z-10 cursor-move"
           style={{
-            top: `${el.position.y}px`,
-            left: `${el.position.x}px`,
+            width: imgWidth,
+            top: `${el.position.y * zoom}px`,
+            left: `${el.position.x * zoom}px`,
             ...dndKitStyle,
           }}
           ref={setNodeRef}
-          {...listeners}
-          {...attributes}
           {...listeners}
           {...attributes}
         />

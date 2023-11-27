@@ -10,6 +10,7 @@ import useElementsAdd from "../../hooks/useElementsAdd";
 import AddElement from "./AddElement/AddElement";
 import ShowElements from "./ShowElements/ShowElements";
 import { DndContext } from "@dnd-kit/core";
+import PreviewModal from "./PreviewModal/PreviewModal";
 
 const EditPage = () => {
   const {
@@ -38,7 +39,9 @@ const EditPage = () => {
   const pdfDataUrl = `data:application/pdf;base64,${base64String}`;
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gray-100 py-5">
+    <div className="flex flex-col items-center min-h-screen bg-blue-950 py-5">
+      <PreviewModal pdfDataUrl={pdfDataUrl} elements={elements} />
+
       <ActionButtons
         handleActionClick={handleActionClick}
         actionType={actionType}
@@ -49,7 +52,7 @@ const EditPage = () => {
       <Document
         file={pdfDataUrl}
         onLoadSuccess={onDocumentLoadSuccess}
-        className={`max-w-[100%] overflow-auto  relative ${
+        className={`max-w-[100%] overflow-auto relative ${
           actionType === "text" ? "cursor-text" : "cursor-default"
         }`}
         onClick={handleDocumentBodyClick}
@@ -70,8 +73,8 @@ const EditPage = () => {
           </DndContext>
         )}
 
-        <div className="bg-gray-200 p-2">
-          <Page pageNumber={currPage} size />
+        <div className="bg-gray-200 p-2 rounded-lg">
+          <Page pageNumber={currPage} />
         </div>
 
         {numPages > 1 && (
