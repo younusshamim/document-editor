@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import toast from "react-hot-toast";
 import {
   getLocalStorageItems,
@@ -45,6 +45,22 @@ const useFileUpload = () => {
     });
   };
 
+  const isFileSizeValid = (file) => {
+    if (file.size > 1024 * 1024) {
+      toast.error(`File size exceeds 1 MB limit: ${file.name}`);
+      return false;
+    }
+    return true;
+  };
+
+  const isFilePDF = (file) => {
+    if (!file.type.startsWith("application/pdf")) {
+      toast.error(`Please select only PDF files: ${file.name}`);
+      return false;
+    }
+    return true;
+  };
+
   const onDrop = async (acceptedFiles) => {
     setUploading(true);
 
@@ -52,14 +68,7 @@ const useFileUpload = () => {
       const uniqueId = uuidv4();
 
       try {
-        if (!file.type.startsWith("application/pdf")) {
-          toast.error(`Please select only PDF files: ${file.name}`);
-          continue;
-        }
-        if (file.size > 1024 * 1024) {
-          toast.error(`File size exceeds 1 MB limit: ${file.name}`);
-          continue;
-        }
+        if (!isFilePDF(file) || !isFileSizeValid(file)) continue;
 
         const fileContent = await readFileContent(file);
         const item = { id: uniqueId, name: file.name, content: fileContent };
@@ -76,7 +85,7 @@ const useFileUpload = () => {
     }
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const items = getLocalStorageItems("pdfFiles");
     setPdfList(items);
   }, []);
