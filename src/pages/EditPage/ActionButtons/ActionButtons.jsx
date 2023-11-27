@@ -64,7 +64,7 @@ const ActionButtons = ({
       </div>
 
       <PrimaryButton
-        className="bg-gray-300 hover:bg-gray-300 text-black"
+        className="bg-gray-800 hover:bg-gray-700 "
         onClick={() => document.getElementById("previewModal").showModal()}
       >
         Preview
