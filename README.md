@@ -2,7 +2,6 @@
 ## Live Link:
 https://document-editor-one.vercel.app/
 
-<hr/>
 <br/>
 
 ## Features
@@ -33,7 +32,6 @@ After editing, users can preview the PDF file to ensure their changes are accura
 7. Zoom Functionality:
 Users can zoom in and out while previewing the PDF, offering a closer or wider view of the document.
 
-<hr/>
 <br/>
 
 ## Technology Stack
