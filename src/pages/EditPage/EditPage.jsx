@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Document, Page } from "react-pdf";
+import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import convertToUint8Array from "../../utils/convertToUint8Array";
@@ -11,6 +11,11 @@ import AddElement from "./AddElement/AddElement";
 import ShowElements from "./ShowElements/ShowElements";
 import { DndContext } from "@dnd-kit/core";
 import PreviewModal from "./PreviewModal/PreviewModal";
+
+import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
+pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+
+// pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.2.16.105.js";
 
 const EditPage = () => {
   const {
