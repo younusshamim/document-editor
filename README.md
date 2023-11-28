@@ -38,3 +38,40 @@ Users can zoom in and out while previewing the PDF, offering a closer or wider v
 - Tailwind
 - JavaScript
 - React.js
+
+<br />
+<hr />
+
+## Setup Instruction
+
+### Prerequisites
+
+- Node.js and npm installed on your machine.
+
+### Installation
+
+1. Clone the repository.
+
+    ```bash
+    git clone https://github.com/younusshamim/document-editor.git
+    ```
+
+2. Change into the project directory.
+
+    ```bash
+    cd document-editor
+    ```
+
+3. Install dependencies.
+
+    ```bash
+    npm install
+    ```
+
+## Available Scripts
+
+In the project directory, you can run:
+
+- `npm start`: Runs the app in development mode.
+- `npm build`: Builds the app for production to the `build` folder.
+- `npm test`: Launches the test runner.
